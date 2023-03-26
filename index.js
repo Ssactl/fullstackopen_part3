@@ -1,9 +1,37 @@
 const { response } = require("express");
 const express = require("express");
+const { token } = require("morgan");
 const app = express();
+const morgan = require("morgan");
 
 //send infomation in the reques body in JSON format
 app.use(express.json());
+
+//create a new token for logging person details
+morgan.token("personDetails", function (req, res) {
+  return JSON.stringify(req.body);
+});
+
+app.use(
+  morgan(function (tokens, req, res) {
+    let result = [
+      tokens.method(req, res),
+      tokens.url(req, res),
+      tokens.status(req, res),
+      tokens.res(req, res, "content-length"),
+      "-",
+      tokens["response-time"](req, res),
+      "ms",
+    ];
+
+    if (tokens.method(req, res) === "POST") {
+      console.log("morgan POST");
+      result.push(tokens.personDetails(req, res));
+    }
+
+    return result.join(" ");
+  })
+);
 
 let persons = [
   {
