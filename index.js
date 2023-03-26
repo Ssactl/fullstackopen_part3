@@ -38,6 +38,8 @@ app.use(
 //same-origin policy and cross-origin resource sharing(CORS)
 app.use(cors());
 
+app.use(express.static("build"));
+
 let persons = [
   {
     id: 1,
@@ -120,7 +122,7 @@ app.post("/api/persons", (request, response) => {
   response.send(persons);
 });
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3003;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
