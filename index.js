@@ -3,6 +3,7 @@ const express = require("express");
 const { token } = require("morgan");
 const app = express();
 const morgan = require("morgan");
+const cors = require("cors");
 
 //send infomation in the reques body in JSON format
 app.use(express.json());
@@ -32,6 +33,10 @@ app.use(
     return result.join(" ");
   })
 );
+
+//it allow for requests from all origins
+//same-origin policy and cross-origin resource sharing(CORS)
+app.use(cors());
 
 let persons = [
   {
@@ -115,7 +120,7 @@ app.post("/api/persons", (request, response) => {
   response.send(persons);
 });
 
-const PORT = 3003;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
